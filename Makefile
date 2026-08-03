@@ -1,7 +1,7 @@
-COMPOSE := docker compose -p vrf-oracle -f onchain/.devcontainer/docker-compose.yml
+COMPOSE := bin/compose
 DC      := $(COMPOSE) exec -T -w /workspace plinth
 
-.PHONY: all backend onchain blueprint up clean
+.PHONY: all up down cabal-update onchain onchain-blueprint backend clean
 
 all: onchain-blueprint backend
 

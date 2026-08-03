@@ -1,5 +1,6 @@
 dist-newstyle
 cabal.project.freeze
+cabal.project.local
 result
 .direnv
 plutus.json

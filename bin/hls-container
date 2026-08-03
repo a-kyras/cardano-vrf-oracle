@@ -1,0 +1,11 @@
+#!/usr/bin/env bash
+echo "$(date '+%H:%M:%S') pwd=$PWD args=[$*]" >> /tmp/hls-invocations.log
+DIR="$(cd "$(dirname "$0")" && pwd -P)"
+ONCHAIN="$(cd "$DIR/../onchain" && pwd -P)"
+"$DIR/compose" up -d >>/tmp/hls-stderr.log 2>&1
+args=("$@"); [ ${#args[@]} -eq 0 ] && args=(--lsp)
+"$DIR/compose" exec -T -w "$ONCHAIN" plinth \
+  haskell-language-server-wrapper "${args[@]}" 2>>/tmp/hls-stderr.log
+rc=$?
+echo "$(date '+%H:%M:%S') exit=$rc" >> /tmp/hls-invocations.log
+exit $rc

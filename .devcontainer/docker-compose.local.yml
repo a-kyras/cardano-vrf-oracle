@@ -1,0 +1,4 @@
+services:
+  plinth:
+    volumes:
+      - ${ONCHAIN_DIR:?ONCHAIN_DIR must be set}:${ONCHAIN_DIR}

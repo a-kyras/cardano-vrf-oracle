@@ -1,0 +1,8 @@
+#!/usr/bin/env bash
+REPO="$(cd "$(dirname "$0")/.." && pwd -P)"
+export ONCHAIN_DIR="$REPO/onchain"
+cd "$REPO" || exit 1
+exec docker compose -p vrf-oracle \
+  -f onchain/.devcontainer/docker-compose.yml \
+  -f .devcontainer/docker-compose.local.yml \
+  "$@"

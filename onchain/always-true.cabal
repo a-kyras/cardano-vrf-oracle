@@ -5,6 +5,11 @@ synopsis:        Minimal Plinth project used to verify a working toolchain
 license:
 build-type:      Simple
 
+flag defer-plugin-errors
+  description: Defer plugin errors to runtime; needed for HLS.
+  default:     False
+  manual:      True
+
 -- Options supported by both GHC and Plinth.
 common ghc-options
   ghc-options:        -Wall
@@ -47,6 +52,7 @@ common plinth-options
     -fno-strictness -fno-unbox-small-strict-fields
     -fno-unbox-strict-fields -fplugin-opt
     PlutusTx.Plugin:target-version=1.1.0
+    -fplugin-opt PlutusTx.Plugin:defer-errors
 
 common plutus-deps
   build-depends:
