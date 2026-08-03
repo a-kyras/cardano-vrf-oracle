@@ -1,0 +1,10 @@
+# Mounts the workspace at the same absolute path as on the host, so an HLS
+# running inside the container reports file paths a host editor understands.
+# HOST_REPO_PATH is exported by hls-docker.sh (nvim); falls back to the plain
+# /workspace mount if applied without it. VS Code's devcontainer doesn't need
+# this file at all.
+services:
+  plinth:
+    volumes:
+      - ${HOST_REPO_PATH:-..}:${HOST_REPO_PATH:-/workspace}
+    working_dir: ${HOST_REPO_PATH:-/workspace}
