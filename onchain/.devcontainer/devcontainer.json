@@ -1,0 +1,19 @@
+{
+  "name": "Plinth (GHC 9.6.6)",
+  "dockerComposeFile": "docker-compose.yml",
+  "service": "plinth",
+  "workspaceFolder": "/workspace",
+  "shutdownAction": "stopCompose",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "haskell.haskell"
+      ],
+      "settings": {
+        // Use the HLS baked into the image (built for GHC 9.6.6) instead of
+        // letting the extension download its own via ghcup.
+        "haskell.manageHLS": "PATH"
+      }
+    }
+  }
+}

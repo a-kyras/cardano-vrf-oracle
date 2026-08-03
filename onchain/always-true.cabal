@@ -1,0 +1,72 @@
+cabal-version:   3.0
+name:            always-true
+version:         0.1.0.0
+synopsis:        Minimal Plinth project used to verify a working toolchain
+license:
+build-type:      Simple
+
+-- Options supported by both GHC and Plinth.
+common ghc-options
+  ghc-options:        -Wall
+  default-language:   Haskell2010
+  default-extensions:
+    DataKinds
+    DeriveAnyClass
+    DeriveGeneric
+    DerivingStrategies
+    FlexibleContexts
+    FlexibleInstances
+    GeneralizedNewtypeDeriving
+    ImportQualifiedPost
+    LambdaCase
+    MultiParamTypeClasses
+    NumericUnderscores
+    OverloadedStrings
+    PatternSynonyms
+    RecordWildCards
+    ScopedTypeVariables
+    StandaloneDeriving
+    Strict
+    TemplateHaskell
+    TypeApplications
+    UndecidableInstances
+    ViewPatterns
+
+-- For code that is only ever run by GHC, never compiled to UPLC.
+common ghc-only-options
+  import:             ghc-options
+  default-extensions: GADTs
+
+-- Required for any module containing on-chain code. GHC's normal optimisations
+-- produce Core that the Plinth plugin cannot compile.
+common plinth-options
+  import:      ghc-options
+  ghc-options:
+    -fobject-code -fno-full-laziness -fno-ignore-interface-pragmas
+    -fno-omit-interface-pragmas -fno-spec-constr -fno-specialise
+    -fno-strictness -fno-unbox-small-strict-fields
+    -fno-unbox-strict-fields -fplugin-opt
+    PlutusTx.Plugin:target-version=1.1.0
+
+common plutus-deps
+  build-depends:
+    , plutus-core       ^>=1.66.0.0
+    , plutus-ledger-api ^>=1.66.0.0
+    , plutus-tx         ^>=1.66.0.0
+    , plutus-tx-plugin  ^>=1.66.0.0
+
+library always-true-validator
+  import:          plinth-options, plutus-deps
+  hs-source-dirs:  src
+  build-depends:   base
+  exposed-modules: AlwaysTrue
+
+executable gen-blueprint
+  import:         ghc-only-options, plutus-deps
+  hs-source-dirs: app
+  main-is:        GenBlueprint.hs
+  build-depends:
+    , always-true-validator
+    , base
+    , bytestring
+    , containers

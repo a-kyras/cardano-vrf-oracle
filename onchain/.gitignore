@@ -1,0 +1,5 @@
+dist-newstyle
+cabal.project.freeze
+result
+.direnv
+plutus.json
