@@ -1,0 +1,40 @@
+{
+  "$id": "always-true",
+  "$schema": "https://cips.cardano.org/cips/cip57/schemas/plutus-blueprint.json",
+  "$vocabulary": {
+    "https://cips.cardano.org/cips/cip57": true,
+    "https://json-schema.org/draft/2020-12/vocab/applicator": true,
+    "https://json-schema.org/draft/2020-12/vocab/core": true,
+    "https://json-schema.org/draft/2020-12/vocab/validation": true
+  },
+  "preamble": {
+    "title": "Always True",
+    "description": "A validator that accepts every transaction",
+    "version": "1.0.0",
+    "plutusVersion": "v3",
+    "license": "MIT"
+  },
+  "validators": [
+    {
+      "title": "Always True",
+      "description": "Succeeds unconditionally",
+      "redeemer": {
+        "title": "Redeemer",
+        "description": "Ignored",
+        "purpose": "spend",
+        "schema": {
+          "$ref": "#/definitions/Unit"
+        }
+      },
+      "compiledCode": "450101002499",
+      "hash": "186e32faa80a26810392fda6d559c7ed4721a65ce1c9d4ef3e1c87b4"
+    }
+  ],
+  "definitions": {
+    "Unit": {
+      "dataType": "constructor",
+      "fields": [],
+      "index": 0
+    }
+  }
+}

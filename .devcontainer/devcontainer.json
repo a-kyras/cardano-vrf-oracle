@@ -1,0 +1,10 @@
+{
+  "name": "Plinth (GHC 9.6.6)",
+  "dockerComposeFile": [
+    "../onchain/.devcontainer/docker-compose.yml",
+    "docker-compose.override.yml"
+  ],
+  "service": "plinth",
+  "workspaceFolder": "/workspace/onchain",
+  "shutdownAction": "stopCompose"
+}
