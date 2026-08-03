@@ -3,5 +3,5 @@
 version = 4
 
 [[package]]
-name = "cardano-vrf-oracle"
+name = "backend"
 version = "0.1.0"
