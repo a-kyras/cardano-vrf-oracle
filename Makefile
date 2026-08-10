@@ -22,7 +22,7 @@ onchain-blueprint: up cabal-update
 	mkdir -p artifacts && cp onchain/plutus.json artifacts/vrf-validator.json
 
 backend:
-	cargo build --release
+	cargo build --releasema
 
 clean:
 	cargo clean

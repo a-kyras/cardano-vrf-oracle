@@ -10,61 +10,74 @@
 -- the V2 evaluator cannot run. The upstream plinth-template gets this wrong.
 module Main where
 
-import AlwaysTrue
+import VRF.Compiled
 
+import Data.ByteString qualified as BS
+import Data.ByteString.Base16 qualified as B16
+import Data.ByteString.Char8 qualified as BS8
 import Data.ByteString.Short qualified as Short
 import Data.Set qualified as Set
-import PlutusLedgerApi.Common (serialiseCompiledCode)
+import PlutusLedgerApi.Common ( serialiseCompiledCode )
 import PlutusTx.Blueprint
-import System.Environment (getArgs)
+import PlutusTx.Builtins ( toBuiltin )
+import System.Environment ( getArgs )
+import VRF.Params ( VrfParams(..) )
 
-alwaysTrueContractBlueprint :: ContractBlueprint
-alwaysTrueContractBlueprint =
+vrfContractBlueprint :: VrfParams -> ContractBlueprint
+vrfContractBlueprint params =
   MkContractBlueprint
-    { contractId = Just "always-true"
-    , contractPreamble = alwaysTruePreamble
-    , contractValidators = Set.singleton alwaysTrueValidatorBlueprint
-    , -- '()' is listed because the redeemer schema references it. Omit it and
-      -- the blueprint contains a "$ref" pointing at nothing; the type checker
-      -- does not catch that.
-      contractDefinitions = deriveDefinitions @'[()]
+    { contractId = Just "vrf-oracle"
+    , contractPreamble = vrfPreamble
+    , contractValidators = Set.singleton (vrfVerifierBlueprint params)
+    , contractDefinitions = deriveDefinitions @'[()]
     }
 
-alwaysTruePreamble :: Preamble
-alwaysTruePreamble =
+vrfPreamble :: Preamble
+vrfPreamble =
   MkPreamble
-    { preambleTitle = "Always True"
-    , preambleDescription = Just "A validator that accepts every transaction"
-    , preambleVersion = "1.0.0"
+    { preambleTitle = "VRF Oracle"
+    , preambleDescription =
+        Just "Pairing-based VRF verification on BLS12-381 (minimal-signature-size)"
+    , preambleVersion = "0.1.0"
     , preamblePlutusVersion = PlutusV3
     , preambleLicense = Just "MIT"
     }
 
-alwaysTrueValidatorBlueprint :: ValidatorBlueprint referencedTypes
-alwaysTrueValidatorBlueprint =
+vrfVerifierBlueprint :: VrfParams -> ValidatorBlueprint referencedTypes
+vrfVerifierBlueprint params =
   MkValidatorBlueprint
-    { validatorTitle = "Always True"
-    , validatorDescription = Just "Succeeds unconditionally"
+    { validatorTitle = "VRF Verifier"
+    , validatorDescription = Just "Placeholder: pure verification function, not yet a validator"
     , validatorParameters = []
     , validatorRedeemer =
         MkArgumentBlueprint
           { argumentTitle = Just "Redeemer"
-          , argumentDescription = Just "Ignored"
+          , argumentDescription = Just "Placeholder until the request validator exists"
           , argumentPurpose = Set.singleton Spend
           , argumentSchema = definitionRef @()
           }
-    , -- The validator inspects no datum, so it declares none.
+    , -- No datum is inspected yet, so none is declared.
       validatorDatum = Nothing
     , validatorCompiled =
         Just
           ( compiledValidator
               PlutusV3
-              (Short.fromShort (serialiseCompiledCode alwaysTrueScript))
+              (Short.fromShort (serialiseCompiledCode (compiledVerifier params)))
           )
     }
 
 main :: IO ()
 main =
   getArgs >>= \case
-    [out] -> writeBlueprint out alwaysTrueContractBlueprint
-    args -> fail $ "Expects one output path, got " <> show (length args)
+    [out, pkHex, dst] -> do
+        pk <- case B16.decode (BS8.pack pkHex) of
+            Left err -> fail ("public key: " <> err)
+            Right bs
+                | BS.length bs == 96 -> pure bs
+                | otherwise -> fail ("public key must be 96 bytes, got" <> show (BS.length bs))
+        let params = VrfParams
+                { vpPubKey = toBuiltin pk
+                , vpDst    = toBuiltin (BS8.pack dst)
+                }
+        writeBlueprint out (vrfContractBlueprint params)
+    args -> fail $ "Usage: gen-blueprint <out.json> <pubkey-hex> <dst>, got " <> show (length args) <> " args"

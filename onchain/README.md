@@ -34,13 +34,13 @@ Terminology, briefly: you write **Plinth** (formerly "Plutus Tx"), using the `pl
 
 ## 1. Prerequisites
 
-| Tool | Needed? | Why |
-|---|---|---|
-| **Nix**, flakes enabled | **Required** | Supplies GHC 9.6.6 *and* three native crypto libraries. This is the whole setup. |
-| **git** | **Required** | Flakes read your source through git — even if you never commit. See §2.3. |
-| `direnv` | Optional | Auto-enter the shell on `cd`. §5. |
-| ghcup / a host GHC / cabal | **No** | Nix provides them. A host ghcup install can actively break things — §7. |
-| `cardano-cli` | **No** | Not needed to compile or to produce a blueprint. |
+| Tool                       | Needed?      | Why                                                                              |
+|----------------------------|--------------|----------------------------------------------------------------------------------|
+| **Nix**, flakes enabled    | **Required** | Supplies GHC 9.6.6 *and* three native crypto libraries. This is the whole setup. |
+| **git**                    | **Required** | Flakes read your source through git — even if you never commit. See §2.3.        |
+| `direnv`                   | Optional     | Auto-enter the shell on `cd`. §5.                                                |
+| ghcup / a host GHC / cabal | **No**       | Nix provides them. A host ghcup install can actively break things — §7.          |
+| `cardano-cli`              | **No**       | Not needed to compile or to produce a blueprint.                                 |
 
 ### Why Nix is not merely a convenience
 

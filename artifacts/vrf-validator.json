@@ -1,5 +1,5 @@
 {
-  "$id": "always-true",
+  "$id": "vrf-oracle",
   "$schema": "https://cips.cardano.org/cips/cip57/schemas/plutus-blueprint.json",
   "$vocabulary": {
     "https://cips.cardano.org/cips/cip57": true,
@@ -8,26 +8,26 @@
     "https://json-schema.org/draft/2020-12/vocab/validation": true
   },
   "preamble": {
-    "title": "Always True",
-    "description": "A validator that accepts every transaction",
-    "version": "1.0.0",
+    "title": "VRF Oracle",
+    "description": "Pairing-based VRF verification on BLS12-381 (minimal-signature-size)",
+    "version": "0.1.0",
     "plutusVersion": "v3",
     "license": "MIT"
   },
   "validators": [
     {
-      "title": "Always True",
-      "description": "Succeeds unconditionally",
+      "title": "VRF Verifier",
+      "description": "Placeholder: pure verification function, not yet a validator",
       "redeemer": {
         "title": "Redeemer",
-        "description": "Ignored",
+        "description": "Placeholder until the request validator exists",
         "purpose": "spend",
         "schema": {
           "$ref": "#/definitions/Unit"
         }
       },
-      "compiledCode": "450101002499",
-      "hash": "186e32faa80a26810392fda6d559c7ed4721a65ce1c9d4ef3e1c87b4"
+      "compiledCode": "58670101002223232323378c66f10ddd80200100099bc4002378400a6f09220113544f444f3a2047656e65726174652074686973003377800491012b424c535f5349475f424c53313233383147315f584d443a5348412d3235365f535357555f524f5f4e554c5f0001",
+      "hash": "61f14f31352799df462043e3b5e15034e75e26018bfbfd6afce1f1f5"
     }
   ],
   "definitions": {

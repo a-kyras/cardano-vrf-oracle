@@ -1,7 +1,7 @@
 cabal-version:   3.0
-name:            always-true
+name:            vrf
 version:         0.1.0.0
-synopsis:        Minimal Plinth project used to verify a working toolchain
+synopsis:        Verifiable Random Function pairing check
 license:
 build-type:      Simple
 
@@ -61,18 +61,31 @@ common plutus-deps
     , plutus-tx         ^>=1.66.0.0
     , plutus-tx-plugin  ^>=1.66.0.0
 
-library always-true-validator
+library vrf-verifier
   import:          plinth-options, plutus-deps
   hs-source-dirs:  src
   build-depends:   base
-  exposed-modules: AlwaysTrue
+  exposed-modules: VRF.Compiled, VRF.Params, VRF.Verify,
 
 executable gen-blueprint
   import:         ghc-only-options, plutus-deps
   hs-source-dirs: app
   main-is:        GenBlueprint.hs
   build-depends:
-    , always-true-validator
+    , vrf-verifier
     , base
     , bytestring
     , containers
+    , base16-bytestring
+
+executable gen-budget
+  import:         ghc-only-options, plutus-deps
+  hs-source-dirs: app
+  main-is:        GenBudget.hs
+  build-depends:
+    , vrf-verifier
+    , base
+    , bytestring
+    , base16-bytestring
+    , text
+
