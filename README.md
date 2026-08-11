@@ -43,6 +43,7 @@ first place.
 backend/     Rust: publisher service, tx building, CLI (builds on the host)
 onchain/     Plinth: validators (builds only inside the container)
 artifacts/   Committed copy of the generated CIP-57 blueprint
+utils/       Rust: libraries and utilities to generate and deploy on-chain part (builds on the host)
 ```
 
 The Rust and Haskell halves are built completely separately — see below.
@@ -51,20 +52,11 @@ The Rust and Haskell halves are built completely separately — see below.
 
 ### Prerequisites
 
-- **Rust** (stable, edition 2024 — 1.85+) for `backend/`, built directly on
-  the host.
-- **Docker**, for the Plinth/Haskell toolchain in `onchain/`. GHC, cabal, and
-  the native BLS/libsodium/libsecp256k1 libraries it needs are painful to set
-  up by hand, so they're containerized. See `onchain/README.md` if you'd
+- **Rust** (stable, edition 2024 - 1.85+) built directly on the host.
+- **Docker**, for the Plinth/Haskell toolchain. See `onchain/README.md` if you'd
   rather use Nix instead of Docker.
-
-### Build split
-
-**Rust builds on the host. Haskell builds in the container.** The container
-only mounts `onchain/`, not the repo root — it can't see `backend/` or the
-workspace `Cargo.toml`, and `cargo build` should never be run inside it (it
-would write host-incompatible artifacts into the shared `target/`).
-
+- **Script Configuration**, for deployment. Run `make config` to generate random one
+- 
 ### Commands
 
 ```bash
@@ -72,7 +64,8 @@ make up                  # start the Plinth container
 make onchain             # cabal build all, inside the container
 make onchain-blueprint   # regenerate artifacts/vrf-validator.json from the validator
 make backend             # build the Rust publisher/CLI (release)
-make                      # same as `make backend`
+make                     # same as `make backend`
+make config              # generate new config file in ./artifacts/config.json
 make down                # stop the container
 make clean               # cargo clean + cabal clean
 ```
@@ -80,3 +73,22 @@ make clean               # cargo clean + cabal clean
 `artifacts/vrf-validator.json` is the canonical, committed CIP-57 blueprint.
 Regenerate it with `make onchain-blueprint` after changing anything under
 `onchain/src`.
+
+### Utilities
+#### Generate Configuration
+Script for generating new configuration written in Rust.
+Intended for new script setup.
+
+To see command help, run:
+```sh
+$ cargo run --bin gen_config -- --help
+```
+
+#### Generate proof
+Script for generating proofs, using existing script configuration.
+This is intended for testing and debugging.
+
+To see command help, run:
+```sh
+$ cargo run --bin gen_proof -- --help
+```

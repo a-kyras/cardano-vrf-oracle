@@ -1,6 +1,6 @@
 -- | Budget verifier. Checks that:
 --
--- 1. Does a proof produced by the Rust signer verify under the Plinth verifier (serialisation / DST agreement)
+-- 1. Does a proof produced by the Rust signer gen_proof under the Plinth verifier (serialisation / DST agreement)
 -- 2. What does the verification cost (execution budget)
 --
 -- Usage:

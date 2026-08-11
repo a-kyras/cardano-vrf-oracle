@@ -1,0 +1,1 @@
+pub const IETF_MIN_SIG_DTF: &'static str = "BLS_SIG_BLS12381G1_XMD:SHA-256_SSWU_RO_NUL_";

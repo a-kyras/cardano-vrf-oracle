@@ -1,0 +1,17 @@
+[package]
+name = "verify"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+# Workpsace
+common.workspace = true
+gen_proof.workspace = true
+
+# External
+anyhow.workspace = true
+clap.workspace = true
+hex.workspace = true
+tap.workspace = true
+tokio.workspace = true
+tracing.workspace = true

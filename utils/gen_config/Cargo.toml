@@ -1,0 +1,18 @@
+[package]
+name = "gen_config"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+# Workspace
+common.workspace = true
+
+# External
+anyhow.workspace = true
+clap.workspace = true
+rand.workspace = true
+tap.workspace = true
+tokio.workspace = true
+sha2.workspace = true
+tracing.workspace = true
+

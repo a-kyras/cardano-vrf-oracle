@@ -1,3 +1,29 @@
 [workspace]
 resolver = "3"
-members = ["backend"]
+members = [
+    "backend",
+    "utils/common",
+    "utils/gen_config",
+    "utils/gen_proof",
+    "utils/verify"
+]
+
+[workspace.dependencies]
+# Workspace dependencies
+common = { path="utils/common" }
+gen_proof = { path="utils/gen_proof" }
+
+# External dependencsie
+anyhow = "1.0"
+blst = "0.3"
+clap = { version = "4.6", features = ["derive", "env"] }
+hex = "0.4"
+rand = { version = "0.10", features = ["chacha"] }
+sha2 = "0.11"
+tap = "1.0"
+thiserror = "2.0"
+tokio = { version = "1.53", features = ["full"] }
+tracing = { version = "0.1", features = ["attributes"] }
+tracing-subscriber = { version = "0.3", features = ["env-filter"] }
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
